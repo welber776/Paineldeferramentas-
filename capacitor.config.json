@@ -1,0 +1,6 @@
+{
+  "appId": "com.toolmaster.app",
+  "appName": "ToolMaster Pro Hub",
+  "webDir": "build",
+  "bundledWebRuntime": false
+}

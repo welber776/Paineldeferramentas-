@@ -1,0 +1,27 @@
+
+workflows:
+  build_capacitor_android:
+    name: Build Capacitor Android App
+    max_build_duration: 15
+    environment:
+      flutter: stable
+      node: 20.11.1
+      vars:
+        PACKAGE_NAME: "com.toolmaster.app"
+    scripts:
+      - npm install
+      - npm install -g @capacitor/cli
+      - npm run build
+      - npx cap sync android
+      - cd android
+      - if [ ! -f "gradle/wrapper/gradle-wrapper.jar" ]; then
+          echo "Gradle Wrapper JAR não encontrado, baixando...";
+          mkdir -p gradle/wrapper;
+          wget -q https://github.com/gradle/gradle/raw/master/gradle/wrapper/gradle-wrapper.jar -O gradle/wrapper/gradle-wrapper.jar;
+        fi
+      - chmod +x gradlew
+      - ./gradlew app:assembleRelease
+      - echo "📁 APK gerado em:"
+      - find app/build/outputs -name "*.apk"
+    artifacts:
+      - android/app/build/outputs/apk/release/app-release-unsigned.apk
